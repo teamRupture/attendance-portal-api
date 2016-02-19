@@ -10,11 +10,13 @@ const routes   = require( './lib/routes' );
 mongoose.connect( config.mongodb );
 
 server.connection( config.connection );
-server.route( routes );
-server.start( ( error ) => {
-	if ( error ) {
-		console.log( error );
-		return;
-	}
-	console.log( 'Server started at:', server.info.uri );
+server.register( require( './lib/plugins' ), ( pluginError ) => {
+	server.route( routes );
+	server.start( ( error ) => {
+		if ( error ) {
+			console.log( error );
+			return;
+		}
+		console.log( 'Server started at:', server.info.uri );
+	} );
 } );
